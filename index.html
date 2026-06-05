@@ -135,7 +135,7 @@ const DATA = {
 
   kpi: {
     accuracy:        { value: "~79%",  color: "green", sub: "Target: ≥72% (Q2) · est. post-fix" },
-    cdr:             { value: "In progress", color: "amber", sub: "Logging · QA not complete" },
+    cdr:             { value: "Phase 1", color: "amber", sub: "Answered + Confident V1 in progress" },
     sirfFloor:       { value: "23",    color: "green", sub: "Gate cleared ≥20 ✓" },
     stageGate:       { value: "3 / 5", color: "amber", sub: "CDR QA + pilot signing open" },
     enterprisePilots:{ value: "0",     color: "amber", sub: "Awash + CBE Capital in pipeline" },
@@ -143,7 +143,7 @@ const DATA = {
 
   gates: [
     { id:"C1", name:"SIRF floor ≥20 for P0 finance clusters",        note:"23 tables tagged. IMF and World Bank data ingested across 23 clusters. Gate cleared.",                     status:"met",    statusLabel:"Met ✓" },
-    { id:"C2", name:"CDR instrumented and emitting weekly data",      note:"Built and logging in Research V2. QA suite not yet complete.",                                             status:"partial", statusLabel:"Built · not validated" },
+    { id:"C2", name:"CDR instrumented and emitting weekly data",      note:"Phase 1 in progress: Answered + Confident V1 signals being instrumented. Sourced and Actionable pending classifier.",  status:"partial", statusLabel:"Phase 1 active" },
     { id:"C3", name:"≥1 production pipeline deploying reliably",      note:"Research V2 in production. COMTRADE, FAOSTAT, World Bank, IMF pipelines running.",                        status:"met",    statusLabel:"Met ✓" },
     { id:"C4", name:"51-query benchmark running with defined rubric", note:"ShegaBench v1 complete. Research V2 vs baseline done. Ground truth confirmed from PostgreSQL.",            status:"met",    statusLabel:"Met ✓" },
     { id:"C5", name:"≥1 enterprise pilot formally signed",            note:"VfG engaged. No signing recorded. Awash Bank and CBE Capital qualification frameworks sent.",             status:"pending", statusLabel:"Pending" },
@@ -158,6 +158,50 @@ const DATA = {
   ],
   accuracyBaseline: "61.3%",
   accuracyCurrent:  "~79%",
+
+  // Accuracy tier definitions — shown in tooltips
+  tierDefs: [
+    {
+      id: "t1", label: "T1 · Retrieval",
+      title: "Tier 1 — Single Retrieval",
+      what: "One factual question requiring one data point. The simplest query type.",
+      example: "What was CBE net profit in 2024?",
+      pass: "Correct figure returned from Shega's database.",
+      note: null,
+    },
+    {
+      id: "t2", label: "T2 · Complex",
+      title: "Tier 2 — Complex Query",
+      what: "Multi-step reasoning required. AskShega must think through several steps to reach a conclusion.",
+      example: "Why is MFI loan growth slowing relative to deposit growth?",
+      pass: "Correct conclusion reached through multi-step reasoning, grounded in internal data.",
+      note: "T2 dropped 11pp in the last benchmark. Root cause investigation ongoing.",
+    },
+    {
+      id: "t3", label: "T3 · Multi-level",
+      title: "Tier 3 — Multi-level Retrieval",
+      what: "Several data points must be retrieved and synthesized into a single coherent answer.",
+      example: "Compare ROE, ROA, and NPL ratio across CBE, Awash, and Dashen for 2024.",
+      pass: "Correct synthesis of multiple retrieved values, with inline citations for each.",
+      note: null,
+    },
+    {
+      id: "t4", label: "T4 · No-data",
+      title: "Tier 4 — No-data Handling",
+      what: "Questions where Shega does not have the answer in its database. AskShega must correctly recognize this rather than hallucinate.",
+      example: "What was Abay Bank ROE in 2019? (data not available for that year)",
+      pass: "AskShega correctly declines or flags the data gap rather than producing a fabricated answer.",
+      note: "Improved from baseline but still the highest-risk tier. Hallucination here is the most commercially damaging failure mode.",
+    },
+    {
+      id: "t5", label: "T5 · Regulatory",
+      title: "Tier 5 — Regulatory Query",
+      what: "Questions about NBE directives, capital market proclamations, insurance regulations, and policy documents.",
+      example: "What does the NBE directive say about minimum capital requirements for MFIs?",
+      pass: "Correct interpretation of the relevant regulation returned, with source attribution to the specific directive.",
+      note: null,
+    },
+  ],
 
   // CDR signal definitions — shown in tooltips
   cdrSignals: [
@@ -227,7 +271,7 @@ const DATA = {
   ],
 
   kr_o3: [
-    { id:"KR3.1", name:"CDR baseline measured",       note:"Built, logging. QA suite pending.",                        current:"Built",    target:"Scorecard", status:"partial",  statusLabel:"Partial" },
+    { id:"KR3.1", name:"CDR baseline measured",       note:"Phase 1 active: Answered + Confident V1 being instrumented. Sourced V1 next sprint.",  current:"Phase 1",  target:"Scorecard", status:"partial",  statusLabel:"In progress" },
     { id:"KR3.2", name:"Ask Shega accuracy",          note:"Architecture fix confirmed.",                               current:"~79%",     target:"≥72%",      status:"on-track", statusLabel:"On track" },
     { id:"KR3.3", name:"Source attribution rate",     note:"~95% overall",                                             current:"~95%",     target:"≥95%",      status:"on-track", statusLabel:"On track" },
     { id:"KR3.4", name:"Banking clusters queryable",  note:"2024-25 data available for all banks",                     current:"All banks",target:"100%",      status:"on-track", statusLabel:"On track" },
@@ -299,6 +343,19 @@ function closeTooltip(e){
     document.getElementById('tooltip-overlay').classList.remove('open');
 }
 
+function openTierTooltip(id){
+  const t = DATA.tierDefs.find(x=>x.id===id);
+  if(!t) return;
+  let html = `<div class="tooltip-title">${t.title}</div>
+  <div class="tooltip-sprint">ShegaBench · Pass rate out of 51-question benchmark</div>`;
+  html += `<div class="tooltip-section">What this tier measures</div><div class="tooltip-body">${t.what}</div>`;
+  html += `<div class="tooltip-section">Example question</div><div class="tooltip-body" style="font-style:italic">"${t.example}"</div>`;
+  html += `<div class="tooltip-section">Passes when</div><div class="tooltip-body">${t.pass}</div>`;
+  if(t.note){ html += `<div class="tooltip-note">⚠ ${t.note}</div>`; }
+  document.getElementById('tooltip-content').innerHTML = html;
+  document.getElementById('tooltip-overlay').classList.add('open');
+}
+
 function renderKRTable(krs){
   return krs.map(kr=>`
     <tr>
@@ -333,15 +390,17 @@ document.addEventListener('DOMContentLoaded',()=>{
   const penC=D.gates.filter(g=>g.status==='pending').length;
   document.getElementById('gate-summary').innerHTML=`${badge('met',metC+' met')} ${parC?badge('partial',parC+' partial'):''} ${penC?badge('pending',penC+' to confirm'):''}`;
 
-  document.getElementById('accuracy-bars').innerHTML=D.accuracyBars.map(b=>`
-    <div class="bar-row">
-      <div class="bar-label">${b.label}</div>
+  document.getElementById('accuracy-bars').innerHTML=D.accuracyBars.map(b=>{
+    const tierId = b.label.split(' ')[0].toLowerCase();
+    return `<div class="bar-row">
+      <div class="bar-label">${b.label} <button class="info-btn" onclick="openTierTooltip('${tierId}')" title="What is this tier?">i</button></div>
       <div class="bar-track">
         <div class="bar-fill" style="width:${b.pct}%;background:${b.color}"><span class="bar-pct">${b.pct}%</span></div>
         <div class="bar-target-line" style="left:72%"></div>
       </div>
       <div class="bar-delta ${b.deltaClass}">${b.delta}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   document.getElementById('accuracy-summary').textContent=`Baseline: ${D.accuracyBaseline} · Current: ${D.accuracyCurrent}`;
 
   document.getElementById('cdr-signals').innerHTML=D.cdrSignals.map(s=>`

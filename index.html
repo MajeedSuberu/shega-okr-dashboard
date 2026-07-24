@@ -93,6 +93,10 @@ body{font-family:var(--font-sans);background:var(--gray-100);color:var(--black);
 .signal-num{font-family:var(--font-mono);font-size:9px;color:var(--gray-400);margin-bottom:4px}
 .signal-name{font-size:13px;font-weight:600;margin-bottom:3px}
 .signal-def{font-size:11px;color:var(--gray-600);line-height:1.5}
+.kr-tag{display:inline-block;font-family:var(--font-mono);font-size:9px;font-weight:600;color:var(--white);background:var(--black);padding:2px 6px;border-radius:2px;letter-spacing:.02em;white-space:nowrap}
+.kr-tag.partnership{background:var(--blue)}
+.kr-tag.strategic{background:#7a4f00}
+.kr-note{font-size:10px;color:var(--gray-400);margin-left:6px}
 /* Info tooltip */
 .info-btn{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:var(--gray-400);color:var(--white);font-size:8px;font-weight:700;cursor:pointer;margin-left:6px;flex-shrink:0;vertical-align:middle;border:none;font-family:var(--font-mono);transition:background .15s}
 .info-btn:hover{background:var(--black)}
@@ -130,23 +134,23 @@ body{font-family:var(--font-sans);background:var(--gray-100);color:var(--black);
 
 const DATA = {
 
-  lastUpdated: "June 2, 2026",
-  sprintLabel: "Week 23 · June 6 meeting prep",
+  lastUpdated: "July 24, 2026",
+  sprintLabel: "Week 30",
 
   kpi: {
-    accuracy:        { value: "~79%",  color: "green", sub: "Target: ≥72% (Q2) · est. post-fix" },
-    cdr:             { value: "Phase 1", color: "amber", sub: "Answered + Confident V1 in progress" },
+    accuracy:        { value: "Stable", color: "green", sub: "Baseline locked · new benchmark in progress" },
+    cdr:             { value: "Phase 1", color: "green", sub: "Built, validated, cleared C2" },
     sirfFloor:       { value: "23",    color: "green", sub: "Gate cleared ≥20 ✓" },
-    stageGate:       { value: "3 / 5", color: "amber", sub: "CDR QA + pilot signing open" },
+    stageGate:       { value: "4 / 5", color: "amber", sub: "C1-C4 met · pilot signing open" },
     enterprisePilots:{ value: "0",     color: "amber", sub: "Awash + CBE Capital in pipeline" },
   },
 
   gates: [
-    { id:"C1", name:"SIRF floor ≥20 for P0 finance clusters",        note:"23 tables tagged. IMF and World Bank data ingested across 23 clusters. Gate cleared.",                     status:"met",    statusLabel:"Met ✓" },
-    { id:"C2", name:"CDR instrumented and emitting weekly data",      note:"Phase 1 in progress: Answered + Confident V1 signals being instrumented. Sourced and Actionable pending classifier.",  status:"partial", statusLabel:"Phase 1 active" },
-    { id:"C3", name:"≥1 production pipeline deploying reliably",      note:"Research V2 in production. COMTRADE, FAOSTAT, World Bank, IMF pipelines running.",                        status:"met",    statusLabel:"Met ✓" },
-    { id:"C4", name:"51-query benchmark running with defined rubric", note:"ShegaBench v1 complete. Research V2 vs baseline done. Ground truth confirmed from PostgreSQL.",            status:"met",    statusLabel:"Met ✓" },
-    { id:"C5", name:"≥1 enterprise pilot formally signed",            note:"VfG engaged. No signing recorded. Awash Bank and CBE Capital qualification frameworks sent.",             status:"pending", statusLabel:"Pending" },
+    { id:"C1", kr:"KR3.6", name:"SIRF floor ≥20 for P0 finance clusters",        note:"23 tables tagged. IMF and World Bank data ingested across 23 clusters. Gate cleared.",                     status:"met",    statusLabel:"Met ✓" },
+    { id:"C2", kr:"KR3.1", name:"CDR instrumented and emitting weekly data",      note:"Phase 1 built and validated. Answered + Confident V1 confirmed reliable by Tesfaye. Stage gate C2 cleared.",          status:"met",    statusLabel:"Met ✓" },
+    { id:"C3", kr:"KR6.1", name:"≥1 production pipeline deploying reliably",      note:"Research V2 in production. COMTRADE, FAOSTAT, World Bank, IMF pipelines running.",                        status:"met",    statusLabel:"Met ✓" },
+    { id:"C4", kr:"KR6.8", name:"51-query benchmark running with defined rubric", note:"ShegaBench v1 complete. Research V2 vs baseline done. Ground truth confirmed from PostgreSQL.",            status:"met",    statusLabel:"Met ✓" },
+    { id:"C5", kr:"KR4.1", name:"≥1 enterprise pilot formally signed",            note:"VfG engaged — stalled. No signing recorded. Awash Bank and CBE Capital qualification frameworks sent.",   status:"pending", statusLabel:"Pending" },
   ],
 
   accuracyBars: [
@@ -256,23 +260,32 @@ const DATA = {
   ],
 
   pipeline: [
-    { name:"Awash Bank",              note:"Demo done · qualification framework sent · awaiting named users and responses",          badge:"pending",  badgeLabel:"Awaiting QF" },
-    { name:"CBE Capital",             note:"Demo done · qualification framework sent · no response yet",                             badge:"pending",  badgeLabel:"Awaiting QF" },
-    { name:"Cepheus",                 note:"First data universe session done · MOU in progress · follow-up scheduled",               badge:"on-track", badgeLabel:"Active" },
-    { name:"CBE Research Team",       note:"Trial access granted · feedback received · in-person working session pending",           badge:"on-track", badgeLabel:"Trial active" },
-    { name:"Coop Bank of Oromia",     note:"Strong validation with Strategy Director · demo pending after budget cycle",             badge:"on-track", badgeLabel:"Demo pending" },
-    { name:"Zemen Bank",              note:"Strategy Officer engaged · formal proposal package needed for CEO office",               badge:"at-risk",  badgeLabel:"Proposal needed" },
-    { name:"Nib International Bank",  note:"Demo scheduled then postponed due to conflicting schedules · needs rescheduling",        badge:"at-risk",  badgeLabel:"Reschedule" },
-    { name:"Ethio Telecom",           note:"Proposal submitted to CMO office · delayed 2 weeks · no formal feedback yet",           badge:"at-risk",  badgeLabel:"Delayed" },
-    { name:"Wegagen Capital",         note:"Strong alignment · CEO session not secured · budget constraints",                        badge:"at-risk",  badgeLabel:"CEO access" },
-    { name:"Berhan Bank",             note:"Demo to schedule · data collaboration interest · NDA to prepare",                       badge:"tag-blue", badgeLabel:"Demo to book" },
-    { name:"Zuri Capital",            note:"Demo done · qualification framework sent · no response yet",                             badge:"pending",  badgeLabel:"Awaiting QF" },
-    { name:"VfG",                     note:"GTM-13 in progress · signing not yet confirmed",                                         badge:"at-risk",  badgeLabel:"Signing pending" },
+    { name:"VfG",                     kr:"KR4.1", krNote:"Named pilot target — stalled", note:"GTM-13 in progress · signing not yet confirmed",                            badge:"pending",  badgeLabel:"Pending" },
+    { name:"CBE Capital",             kr:"KR4.1", krNote:"Pilot track",  note:"Responded (Bayu) · trial access planned for next week",                                 badge:"on-track", badgeLabel:"Trial planned" },
+    { name:"CBE Research Team",       kr:"KR4.1", krNote:"Pilot track",  note:"Trial access granted but not yet active · feedback received · in-person working session pending", badge:"pending", badgeLabel:"Trial not active" },
+    { name:"ATI",                     kr:"Partnerships", krNote:"Institutional/data partnership", note:"Dr. Girum connected the relevant team and will personally oversee communication · hoping to meet in person next week", badge:"on-track", badgeLabel:"In-person next week" },
+    { name:"Prime Capital",           kr:"KR4.1", krNote:"Pilot track — new", note:"Conversation started · meeting planned next week · date/time TBC",                  badge:"pending",  badgeLabel:"Meeting planned" },
+    { name:"Coop Bank of Oromia",     kr:"KR4.1", krNote:"Pilot track",  note:"Suggested meeting early July · fully occupied through June",                            badge:"on-track", badgeLabel:"Early July" },
+    { name:"Sinqee",                  kr:"KR4.1", krNote:"Pilot track — Q3 per I4.4", note:"Research/advisory demand expected to increase · open to reinitiating prior discussions · Majeed/Elsabet to follow up", badge:"tag-blue", badgeLabel:"Reinitiating" },
+    { name:"East African Holding",    kr:"KR4.1", krNote:"Pilot track",  note:"Still securing exec contacts · no response from Addis yet",                              badge:"at-risk",  badgeLabel:"No response" },
+    { name:"Zemen Bank",              kr:"KR4.1", krNote:"Pilot track",  note:"Exploring direct CEO meeting before formal proposal submission",                         badge:"at-risk",  badgeLabel:"CEO access" },
+    { name:"Awash Bank",              kr:"KR4.1", krNote:"Pilot track",  note:"Demo done · qualification framework sent · no response yet",                             badge:"at-risk",  badgeLabel:"No response" },
+    { name:"Bunna Bank",              kr:"KR4.1", krNote:"Pilot track",  note:"Follow-ups postponed · limited availability on their side · working to secure early next week", badge:"at-risk",  badgeLabel:"Postponed" },
+    { name:"Nib International Bank",  kr:"KR4.1", krNote:"Pilot track",  note:"Demo scheduled then postponed due to conflicting schedules · needs rescheduling",        badge:"at-risk",  badgeLabel:"Reschedule" },
+    { name:"Wegagen Capital",         kr:"KR4.1", krNote:"Pilot track — Q3 per I4.4",  note:"Strong alignment · CEO session not secured · budget constraints",           badge:"at-risk",  badgeLabel:"CEO access" },
+    { name:"Berhan Bank",             kr:"KR4.1", krNote:"Pilot track",  note:"Demo to schedule · data collaboration interest · NDA to prepare",                       badge:"tag-blue", badgeLabel:"Demo to book" },
+    { name:"Zuri Capital",            kr:"KR4.1", krNote:"Pilot track — Q3 per I4.4",  note:"Demo done · qualification framework sent · no response yet",               badge:"pending",  badgeLabel:"Awaiting QF" },
+    { name:"ProInvest Capital",       kr:"KR4.1", krNote:"New lead — investor expo",  note:"Introduction made at investor expo · follow-up planned next week",         badge:"pending",  badgeLabel:"New lead" },
+    { name:"Ignite",                  kr:"KR4.1", krNote:"New lead — investor expo",  note:"Introduction made at investor expo · follow-up planned next week",         badge:"pending",  badgeLabel:"New lead" },
+    { name:"HST",                     kr:"KR4.1", krNote:"New lead — investor expo",  note:"Introduction made at investor expo · follow-up planned next week",         badge:"pending",  badgeLabel:"New lead" },
+    { name:"Cepheus",                 kr:"Partnerships", krNote:"Data partnership, not pilot KR — I2.1 named", note:"Data universe mapping in progress · next session Friday with Helaway and economist", badge:"on-track", badgeLabel:"Active" },
+    { name:"Ministry of Agriculture", kr:"Partnerships", krNote:"Data partnership", note:"Letter submitted. Org undergoing restructuring — collaboration discussions on hold until complete, but data request continues processing.", badge:"at-risk", badgeLabel:"Restructuring pause" },
+    { name:"Ethio Telecom",           kr:"Strategic Option", krNote:"Ask Tele — not core Q2 KR, trigger-based", note:"Engagement manager is leaving the org, his team unclear on next steps · following up directly with the Director for continuity", badge:"at-risk",  badgeLabel:"Contact change" },
   ],
 
   kr_o3: [
-    { id:"KR3.1", name:"CDR baseline measured",       note:"Phase 1 active: Answered + Confident V1 being instrumented. Sourced V1 next sprint.",  current:"Phase 1",  target:"Scorecard", status:"partial",  statusLabel:"In progress" },
-    { id:"KR3.2", name:"Ask Shega accuracy",          note:"Architecture fix confirmed.",                               current:"~79%",     target:"≥72%",      status:"on-track", statusLabel:"On track" },
+    { id:"KR3.1", name:"CDR baseline measured — C2 cleared",       note:"Phase 1 active: Answered + Confident V1 being instrumented. Sourced V1 next sprint.",  current:"Phase 1",  target:"Scorecard", status:"partial",  statusLabel:"In progress" },
+    { id:"KR3.2", name:"Ask Shega accuracy",          note:"Baseline locked on v1 benchmark — confirmed performing well. New benchmark in progress with higher standards and Bayu input. AskShega has only improved.", current:"Stable",   target:"≥72%",      status:"on-track", statusLabel:"On track" },
     { id:"KR3.3", name:"Source attribution rate",     note:"~95% overall",                                             current:"~95%",     target:"≥95%",      status:"on-track", statusLabel:"On track" },
     { id:"KR3.4", name:"Banking clusters queryable",  note:"2024-25 data available for all banks",                     current:"All banks",target:"100%",      status:"on-track", statusLabel:"On track" },
     { id:"KR3.5", name:"Hallucination rate (financial)",note:"T4 improved to 70%",                                     current:"Improved", target:"≤10%",      status:"at-risk",  statusLabel:"At risk" },
@@ -280,7 +293,7 @@ const DATA = {
   ],
 
   kr_o4: [
-    { id:"KR4.1", name:"Enterprise pilot launched",        note:"Awash + CBE Capital qualification sent",  current:"0 signed", target:"≥1",        status:"pending",  statusLabel:"Pending" },
+    { id:"KR4.1", name:"Enterprise pilot launched",        note:"Ignite Capital strongest design partner candidate. ATI three workstreams active. AI Credit Intelligence Platform proposed. SWIFT RFP deadline Aug 14.", current:"0 signed", target:"≥1",        status:"at-risk",  statusLabel:"At risk" },
     { id:"KR4.2", name:"Pilot champion weekly login",      note:"Depends on KR4.1",                        current:"—",        target:"≥3x/week",  status:"blocked",  statusLabel:"Blocked" },
     { id:"KR4.3", name:"ICP interviews completed",         note:"Demo pipeline starting this week",        current:"—",        target:"≥10",       status:"at-risk",  statusLabel:"At risk" },
     { id:"KR4.4", name:"Pricing hypothesis tested",        note:"",                                        current:"—",        target:"≥15 resp.", status:"unknown",  statusLabel:"Unknown" },
@@ -297,21 +310,48 @@ const DATA = {
   ],
 
   kr_o6: [
-    { id:"KR6.1", name:"Production pipelines both green", note:"R2, COMTRADE, FAOSTAT, WB, IMF running", current:"Running",    target:"Both green", status:"on-track", statusLabel:"On track" },
-    { id:"KR6.2", name:"Deployment frequency",            note:"3 releases in 10 days",                  current:"3 in 10d",   target:"≥2/week",    status:"on-track", statusLabel:"On track" },
+    { id:"KR6.1", name:"Production pipelines both green", note:"HR + DFS deploying to production July 24. World Bank 360 ingested. Data pipeline audit in progress across all 7 sources.", current:"Deploying", target:"Both green", status:"on-track", statusLabel:"On track" },
+    { id:"KR6.2", name:"Deployment frequency",            note:"New cadence: Friday planning → Monday release → Wednesday content. Multiple releases shipping this week.", current:"Weekly",     target:"≥2/week",    status:"on-track", statusLabel:"On track" },
     { id:"KR6.3", name:"Hardcoded credentials",           note:"MongoDB fix in progress",                current:"In progress",target:"0",          status:"at-risk",  statusLabel:"At risk" },
     { id:"KR6.4", name:"Azure monthly burn documented",   note:"",                                       current:"Overdue",    target:"Documented", status:"blocked",  statusLabel:"Blocked" },
-    { id:"KR6.8", name:"AI Eval Pipeline Level 1",        note:"ShegaBench v1 complete",                 current:"Complete",   target:"Level 1",    status:"on-track", statusLabel:"On track" },
+    { id:"KR6.8", name:"AI Eval Pipeline Level 1",        note:"v1 baseline locked and confirmed. v2 in progress — higher standard, Bayu input, versioning framework being built. Centralized test system next.", current:"v2 in progress", target:"Level 1", status:"on-track", statusLabel:"On track" },
   ],
 
   nextItems: [
-    { name:"CDR QA suite complete",              note:"Built and logging. QA suite needed to formally clear C2.",                                   status:"partial",  statusLabel:"In progress" },
-    { name:"Data Trust Framework user-visible",  note:"Lineage and Verification shipped. UI + methodology publication pending.",                    status:"at-risk",  statusLabel:"At risk" },
-    { name:"SIRF-AI integration validated",      note:"23 tables tagged. Whether Ask Shega actively uses tags not yet confirmed.",                  status:"blocked",  statusLabel:"Not validated" },
-    { name:"T2 Complex regression resolved",     note:"Complex queries dropped 11pp. Root cause investigation needed.",                             status:"blocked",  statusLabel:"Needs investigation" },
-    { name:"10 remaining tables SIRF-tagged",    note:"23 of 33 done. 10 remaining.",                                                              status:"at-risk",  statusLabel:"At risk" },
-    { name:"First enterprise pilot revenue ($3.5K)", note:"Awash Bank and CBE Capital qualification frameworks sent.",                             status:"pending",  statusLabel:"Pending" },
+    { name:"CDR QA suite complete",              kr:"KR3.1", note:"Built and logging. QA suite needed to formally clear C2.",                                   status:"partial",  statusLabel:"In progress" },
+    { name:"Derived data complete across 31 banks", kr:"KR3.2", note:"Named June 12 as the priority blocker for cold-query readiness. No movement logged since.", status:"blocked",  statusLabel:"Stalled" },
+    { name:"Data Trust Framework user-visible",  kr:"KR3.3", note:"Lineage and Verification shipped. UI + methodology publication in progress.",                 status:"partial",  statusLabel:"In progress" },
+    { name:"SIRF-AI integration validated",      kr:"KR3.6", note:"23 tables tagged. Whether Ask Shega actively uses tags not yet confirmed.",                  status:"blocked",  statusLabel:"Not validated" },
+    { name:"T2 Complex regression resolved",     kr:"KR3.2", note:"Complex queries dropped 11pp. Root cause investigation needed.",                             status:"blocked",  statusLabel:"Needs investigation" },
+    { name:"10 remaining tables SIRF-tagged",    kr:"KR3.6", note:"23 of 33 done. 10 remaining.",                                                              status:"at-risk",  statusLabel:"At risk" },
+    { name:"ICP interviews completed",           kr:"KR4.3", note:"Target ≥10 across 3 segments. No movement logged in 3+ weeks.",                            status:"blocked",  statusLabel:"Stalled" },
+    { name:"Pricing hypothesis tested",          kr:"KR4.4", note:"Target ≥15 respondents. Flagged June 12 as action point, no movement since.",               status:"blocked",  statusLabel:"Stalled" },
+    { name:"First enterprise pilot revenue ($3.5K)", kr:"KR4.1", note:"Awash Bank and CBE Capital qualification frameworks sent.",                             status:"pending",  statusLabel:"Pending" },
   ],
+
+  // Benchmark version history — what standard each score was measured against
+  benchmarkHistory: [
+    {
+      id: "v1", name: "ShegaBench v1", period: "May \u2013 July 14, 2026 (locked)",
+      standard: "51-query benchmark across 5 tiers (T1 Retrieval, T2 Complex, T3 Multi-level, T4 No-data, T5 Regulatory). Ground truth confirmed from PostgreSQL. Manual review against a defined rubric per tier.",
+      baselineScore: "61.3%", latestScore: "July 14 run \u2014 confirmed further improvement",
+      status: "met", statusLabel: "Locked \u2014 baseline confirmed",
+      note: "July 14 run: T4 (no-data) and T2 (complex queries) improved by ~76pp. Why it improved: removed domain-specific prompts that were artificially steering the agent to specific tables; multi-table scanning now runs simultaneously rather than sequentially; tool constraints loosened (previously capped at 5 results); judge agent made stricter. AskShega has only gotten better. This baseline is locked.",
+    },
+    {
+      id: "v2", name: "ShegaBench v2", period: "In definition \u2014 July 2026",
+      standard: "Eight dimensions: (1) Harder, more realistic questions. (2) Sources ranked and displayed, with multiple sources compared where relevant. (3) Bayu input on answer structure and financial drivers. (4) Stricter judge agent. (5) Workflow output quality \u2014 does the response produce something actionable? (6) Regulatory currency \u2014 is the directive cited the most recent one? (7) Cold query handling \u2014 unscripted questions never seen before. (8) Containment / response discipline \u2014 answers the question without padding. User feedback as a future metric once live.",
+      baselineScore: "\u2014", latestScore: "Not yet scored against this standard",
+      status: "partial", statusLabel: "In definition",
+      note: "Numbers will look different from v1 because the standard is higher, not because AskShega regressed. Run a bridge measurement when v2 launches: score the current model on both v1 and v2 in the same session to keep the trend lines connected.",
+    },
+  ],
+
+  // Non-KR tags shown alongside KR tags in pipeline — explains what they mean
+  specialTags: {
+    "Partnerships": { title: "Partnerships (Annual Target)", body: "Not a numbered Q2 KR. Annual target: \u2265 8 total partnerships \u2014 3 strategic, 3 data, 2 channel. Cepheus and Ministry of Agriculture sit here, not under KR4.1, because they are data/institutional partnerships, not enterprise pilot accounts." },
+    "Strategic Option": { title: "Strategic Option (Q4, trigger-based)", body: "Listed in the plan under \u2018Strategic Options Under Observation\u2019 \u2014 not core Q2 work. Ask Tele (Ethio Telecom) activates only once commercial terms are agreed AND CDR \u2265 60%, accuracy \u2265 80%. Tracked here for visibility, not counted toward Q2 KRs." },
+  },
 };
 
 // ============================================================
@@ -356,6 +396,43 @@ function openTierTooltip(id){
   document.getElementById('tooltip-overlay').classList.add('open');
 }
 
+function openKRInfo(tag){
+  let html = '';
+  if(DATA.specialTags && DATA.specialTags[tag]){
+    const s = DATA.specialTags[tag];
+    html = `<div class="tooltip-title">${s.title}</div><div class="tooltip-body" style="margin-top:8px">${s.body}</div>`;
+  } else {
+    const allKRs = [...D_kr_o3_o6()];
+    const kr = allKRs.find(k => k.id === tag);
+    if(!kr){
+      html = `<div class="tooltip-title">${tag}</div><div class="tooltip-body" style="margin-top:8px">No definition found for this KR — check the OKR plan directly.</div>`;
+    } else {
+      html = `<div class="tooltip-title">${kr.id} — ${kr.name}</div>`;
+      html += `<div class="tooltip-section">Target</div><div class="tooltip-body">${kr.target}</div>`;
+      html += `<div class="tooltip-section">Current</div><div class="tooltip-body">${kr.current}</div>`;
+      html += `<div class="tooltip-section">Status</div><div class="tooltip-body">${kr.statusLabel}</div>`;
+      if(kr.note){ html += `<div class="tooltip-section">Note</div><div class="tooltip-body">${kr.note}</div>`; }
+    }
+  }
+  document.getElementById('tooltip-content').innerHTML = html;
+  document.getElementById('tooltip-overlay').classList.add('open');
+}
+
+function D_kr_o3_o6(){
+  return [].concat(DATA.kr_o3, DATA.kr_o4, DATA.kr_o5, DATA.kr_o6);
+}
+
+function openBenchmarkInfo(id){
+  const b = DATA.benchmarkHistory.find(x => x.id === id);
+  if(!b) return;
+  let html = `<div class="tooltip-title">${b.name}</div><div class="tooltip-sprint">${b.period}</div>`;
+  html += `<div class="tooltip-section">Standard</div><div class="tooltip-body">${b.standard}</div>`;
+  html += `<div class="tooltip-section">Baseline \u2192 Latest</div><div class="tooltip-body">${b.baselineScore} \u2192 ${b.latestScore}</div>`;
+  if(b.note){ html += `<div class="tooltip-note">\u26a0 ${b.note}</div>`; }
+  document.getElementById('tooltip-content').innerHTML = html;
+  document.getElementById('tooltip-overlay').classList.add('open');
+}
+
 function renderKRTable(krs){
   return krs.map(kr=>`
     <tr>
@@ -369,7 +446,7 @@ function renderKRTable(krs){
 
 document.addEventListener('DOMContentLoaded',()=>{
   const D=DATA;
-  document.getElementById('top-bar-right').innerHTML=D.lastUpdated+' · '+D.sprintLabel+'<br>Internal · Research V2 baseline';
+  document.getElementById('top-bar-right').innerHTML=D.lastUpdated+' · '+D.sprintLabel+'<br>Internal';
 
   const k=D.kpi;
   document.getElementById('kpi-accuracy').innerHTML=`<div class="kpi-label">Ask Shega accuracy</div><div class="kpi-value ${k.accuracy.color}">${k.accuracy.value}</div><div class="kpi-sub">${k.accuracy.sub}</div>`;
@@ -381,7 +458,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('gates').innerHTML=D.gates.map(g=>`
     <div class="gate-row">
       <div class="gate-num">${g.id}</div>
-      <div class="gate-content"><div class="gate-name">${g.name}</div><div class="gate-note">${g.note}</div></div>
+      <div class="gate-content"><div class="gate-name">${g.name} <span class="kr-tag" onclick="openKRInfo('${g.kr}')" style="cursor:pointer">${g.kr}</span></div><div class="gate-note">${g.note}</div></div>
       <div class="gate-status">${badge(g.status,g.statusLabel)}</div>
     </div>`).join('');
 
@@ -403,6 +480,16 @@ document.addEventListener('DOMContentLoaded',()=>{
   }).join('');
   document.getElementById('accuracy-summary').textContent=`Baseline: ${D.accuracyBaseline} · Current: ${D.accuracyCurrent}`;
 
+  document.getElementById('benchmark-history').innerHTML=D.benchmarkHistory.map(b=>`
+    <div class="gate-row">
+      <div class="gate-num">${b.id.toUpperCase()}</div>
+      <div class="gate-content">
+        <div class="gate-name">${b.name} <button class="info-btn" onclick="openBenchmarkInfo('${b.id}')" title="View standard">i</button></div>
+        <div class="gate-note">${b.period} · Latest: ${b.latestScore}</div>
+      </div>
+      <div class="gate-status">${badge(b.status,b.statusLabel)}</div>
+    </div>`).join('');
+
   document.getElementById('cdr-signals').innerHTML=D.cdrSignals.map(s=>`
     <div class="signal ${s.cssClass}">
       <div class="signal-num">${s.phase}</div>
@@ -410,11 +497,13 @@ document.addEventListener('DOMContentLoaded',()=>{
       <div class="signal-def">${s.definition.substring(0,90)}${s.definition.length>90?'…':''}</div>
     </div>`).join('');
 
-  document.getElementById('pipeline').innerHTML=D.pipeline.map(p=>`
-    <div class="pipeline-row">
-      <div style="flex:1"><div class="pipeline-name">${p.name}</div><div class="pipeline-note">${p.note}</div></div>
+  document.getElementById('pipeline').innerHTML=D.pipeline.map(p=>{
+    const tagClass = p.kr==='Partnerships' ? 'partnership' : (p.kr==='Strategic Option' ? 'strategic' : '');
+    return `<div class="pipeline-row">
+      <div style="flex:1"><div class="pipeline-name">${p.name} <span class="kr-tag ${tagClass}" onclick="openKRInfo('${p.kr}')" style="cursor:pointer">${p.kr}</span><span class="kr-note">${p.krNote||''}</span></div><div class="pipeline-note">${p.note}</div></div>
       <div class="pipeline-badge">${badge(p.badge,p.badgeLabel)}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   document.getElementById('kr-o3').innerHTML=renderKRTable(D.kr_o3);
   document.getElementById('kr-o4').innerHTML=renderKRTable(D.kr_o4);
@@ -423,7 +512,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   document.getElementById('next-items').innerHTML=D.nextItems.map(n=>`
     <tr>
-      <td style="padding:8px 10px;width:280px;font-size:12px;font-weight:500">${n.name}</td>
+      <td style="padding:8px 10px;width:260px;font-size:12px;font-weight:500">${n.name} <span class="kr-tag" onclick="openKRInfo('${n.kr}')" style="cursor:pointer">${n.kr}</span></td>
       <td style="padding:8px 10px;font-size:11px;color:var(--gray-400)">${n.note}</td>
       <td style="padding:8px 10px;text-align:right">${badge(n.status,n.statusLabel)}</td>
     </tr>`).join('');
@@ -496,6 +585,16 @@ document.addEventListener('DOMContentLoaded',()=>{
   </div>
 </div>
 
+<div class="section-label">Evaluation standard — version history</div>
+<div class="card" style="margin-bottom:16px">
+  <div class="card-header">
+    <div class="card-title">ShegaBench — what standard each score was measured against</div>
+    <span class="badge partial">v1 re-scoring · v2 in definition</span>
+  </div>
+  <div class="card-body" id="benchmark-history"></div>
+  <div style="padding:0 16px 14px;font-size:11px;color:var(--gray-400)">Scores are only directly comparable within the same benchmark version. Click a version above for the full standard it was measured against.</div>
+</div>
+
 <div class="section-label">Q2 Objectives & Key Results</div>
 <div class="grid-2">
   <div class="card">
@@ -519,7 +618,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 <div class="section-label">Enterprise pipeline</div>
 <div class="card" style="margin-bottom:16px">
   <div class="card-header">
-    <div class="card-title">Accounts &amp; prospects</div>
+    <div class="card-title">Accounts &amp; prospects — tagged by which KR each one drives</div>
     <span class="badge at-risk">0 signed · 0 paying · $0 ARR</span>
   </div>
   <div class="card-body" id="pipeline"></div>

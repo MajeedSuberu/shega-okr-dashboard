@@ -134,8 +134,8 @@ body{font-family:var(--font-sans);background:var(--gray-100);color:var(--black);
 
 const DATA = {
 
-  lastUpdated: "July 24, 2026",
-  sprintLabel: "Week 30",
+  lastUpdated: "July 31, 2026",
+  sprintLabel: "Week 31",
 
   kpi: {
     accuracy:        { value: "Stable", color: "green", sub: "Baseline locked · new benchmark in progress" },
@@ -148,7 +148,7 @@ const DATA = {
   gates: [
     { id:"C1", kr:"KR3.6", name:"SIRF floor ≥20 for P0 finance clusters",        note:"23 tables tagged. IMF and World Bank data ingested across 23 clusters. Gate cleared.",                     status:"met",    statusLabel:"Met ✓" },
     { id:"C2", kr:"KR3.1", name:"CDR instrumented and emitting weekly data",      note:"Phase 1 built and validated. Answered + Confident V1 confirmed reliable by Tesfaye. Stage gate C2 cleared.",          status:"met",    statusLabel:"Met ✓" },
-    { id:"C3", kr:"KR6.1", name:"≥1 production pipeline deploying reliably",      note:"Research V2 in production. COMTRADE, FAOSTAT, World Bank, IMF pipelines running.",                        status:"met",    statusLabel:"Met ✓" },
+    { id:"C3", kr:"KR6.1", name:"≥1 production pipeline deploying reliably",      note:"DFS fully deployed. World Bank 360 ingested. Estifanos report Monday then Postgres migration. Research V2, COMTRADE, FAOSTAT, IMF all running.", status:"met",    statusLabel:"Met ✓" },
     { id:"C4", kr:"KR6.8", name:"51-query benchmark running with defined rubric", note:"ShegaBench v1 complete. Research V2 vs baseline done. Ground truth confirmed from PostgreSQL.",            status:"met",    statusLabel:"Met ✓" },
     { id:"C5", kr:"KR4.1", name:"≥1 enterprise pilot formally signed",            note:"VfG engaged — stalled. No signing recorded. Awash Bank and CBE Capital qualification frameworks sent.",   status:"pending", statusLabel:"Pending" },
   ],
@@ -286,14 +286,14 @@ const DATA = {
   kr_o3: [
     { id:"KR3.1", name:"CDR baseline measured — C2 cleared",       note:"Phase 1 active: Answered + Confident V1 being instrumented. Sourced V1 next sprint.",  current:"Phase 1",  target:"Scorecard", status:"partial",  statusLabel:"In progress" },
     { id:"KR3.2", name:"Ask Shega accuracy",          note:"Baseline locked on v1 benchmark — confirmed performing well. New benchmark in progress with higher standards and Bayu input. AskShega has only improved.", current:"Stable",   target:"≥72%",      status:"on-track", statusLabel:"On track" },
-    { id:"KR3.3", name:"Source attribution rate",     note:"~95% overall",                                             current:"~95%",     target:"≥95%",      status:"on-track", statusLabel:"On track" },
+    { id:"KR3.3", name:"Source attribution rate",     note:"L1/L2 trust layer prototype built and confirmed feasible. Showing to Bayu (and Anteneh) next Thursday. Not production-confirmed yet — still prototype stage.", current:"~95%",     target:"≥95%",      status:"on-track", statusLabel:"On track" },
     { id:"KR3.4", name:"Banking clusters queryable",  note:"2024-25 data available for all banks",                     current:"All banks",target:"100%",      status:"on-track", statusLabel:"On track" },
     { id:"KR3.5", name:"Hallucination rate (financial)",note:"T4 improved to 70%",                                     current:"Improved", target:"≤10%",      status:"at-risk",  statusLabel:"At risk" },
     { id:"KR3.6", name:"SIRF Floor baseline",         note:"23 tables tagged · SIRF-AI integration not yet validated", current:"23 tagged",target:"Assessment",status:"on-track", statusLabel:"On track" },
   ],
 
   kr_o4: [
-    { id:"KR4.1", name:"Enterprise pilot launched",        note:"Ignite Capital strongest design partner candidate. ATI three workstreams active. AI Credit Intelligence Platform proposed. SWIFT RFP deadline Aug 14.", current:"0 signed", target:"≥1",        status:"at-risk",  statusLabel:"At risk" },
+    { id:"KR4.1", name:"Enterprise pilot launched",        note:"ATI: three workstreams active, Access to Credit campaign confirmed, paid vs. unpaid question open. NBE Insurance: EIRA split in progress, Director contact available now. SWIFT/EIFS work started. UNFPA Aug 14 deadline. Ignite Capital design partner follow-up pending.", current:"0 signed", target:"≥1",        status:"at-risk",  statusLabel:"At risk" },
     { id:"KR4.2", name:"Pilot champion weekly login",      note:"Depends on KR4.1",                        current:"—",        target:"≥3x/week",  status:"blocked",  statusLabel:"Blocked" },
     { id:"KR4.3", name:"ICP interviews completed",         note:"Demo pipeline starting this week",        current:"—",        target:"≥10",       status:"at-risk",  statusLabel:"At risk" },
     { id:"KR4.4", name:"Pricing hypothesis tested",        note:"",                                        current:"—",        target:"≥15 resp.", status:"unknown",  statusLabel:"Unknown" },
@@ -310,16 +310,17 @@ const DATA = {
   ],
 
   kr_o6: [
-    { id:"KR6.1", name:"Production pipelines both green", note:"HR + DFS deploying to production July 24. World Bank 360 ingested. Data pipeline audit in progress across all 7 sources.", current:"Deploying", target:"Both green", status:"on-track", statusLabel:"On track" },
-    { id:"KR6.2", name:"Deployment frequency",            note:"New cadence: Friday planning → Monday release → Wednesday content. Multiple releases shipping this week.", current:"Weekly",     target:"≥2/week",    status:"on-track", statusLabel:"On track" },
+    { id:"KR6.1", name:"Production pipelines both green", note:"DFS fully deployed. World Bank 360 ingested, pending Estifanos report before Postgres migration. FDI page QA passed, going to production next week.", current:"Live",     target:"Both green", status:"on-track", statusLabel:"On track" },
+    { id:"KR6.2", name:"Deployment frequency",            note:"Agentic SDLC agents complete, deploying Monday. FDI page to production next week. L1/L2 trust layer prototype built — visible next Wednesday or Thursday pending QA.", current:"Weekly",     target:"≥2/week",    status:"on-track", statusLabel:"On track" },
     { id:"KR6.3", name:"Hardcoded credentials",           note:"MongoDB fix in progress",                current:"In progress",target:"0",          status:"at-risk",  statusLabel:"At risk" },
     { id:"KR6.4", name:"Azure monthly burn documented",   note:"",                                       current:"Overdue",    target:"Documented", status:"blocked",  statusLabel:"Blocked" },
-    { id:"KR6.8", name:"AI Eval Pipeline Level 1",        note:"v1 baseline locked and confirmed. v2 in progress — higher standard, Bayu input, versioning framework being built. Centralized test system next.", current:"v2 in progress", target:"Level 1", status:"on-track", statusLabel:"On track" },
+    { id:"KR6.8", name:"AI Eval Pipeline Level 1",        note:"v1 baseline locked. v2 in progress. Eval framework restructure: possible delay flagged by Tesfaye — status update July 31. May move to at-risk depending on that call.", current:"v2 in progress", target:"Level 1", status:"at-risk", statusLabel:"Check July 31" },
   ],
 
   nextItems: [
     { name:"CDR QA suite complete",              kr:"KR3.1", note:"Built and logging. QA suite needed to formally clear C2.",                                   status:"partial",  statusLabel:"In progress" },
-    { name:"Derived data complete across 31 banks", kr:"KR3.2", note:"Named June 12 as the priority blocker for cold-query readiness. No movement logged since.", status:"blocked",  statusLabel:"Stalled" },
+    { name:"Derived data complete across 31 banks", kr:"KR3.2", note:"Ratios, growth rates, compound figures across all 31 banks. Named June 12 as the primary blocker for cold-query readiness. No confirmed status update as of July 31.", status:"at-risk",  statusLabel:"Check status" },
+    { name:"World Bank 360 data live in AskShega", kr:"KR3.2", note:"Ingested. Estifanos compiling a content report on what's in the data — lands Monday. Then ~30 min Postgres migration. Use cases being built with Bayu week of Aug 3.", status:"partial",  statusLabel:"In progress" },
     { name:"Data Trust Framework user-visible",  kr:"KR3.3", note:"Lineage and Verification shipped. UI + methodology publication in progress.",                 status:"partial",  statusLabel:"In progress" },
     { name:"SIRF-AI integration validated",      kr:"KR3.6", note:"23 tables tagged. Whether Ask Shega actively uses tags not yet confirmed.",                  status:"blocked",  statusLabel:"Not validated" },
     { name:"T2 Complex regression resolved",     kr:"KR3.2", note:"Complex queries dropped 11pp. Root cause investigation needed.",                             status:"blocked",  statusLabel:"Needs investigation" },
